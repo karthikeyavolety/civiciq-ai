@@ -1,5 +1,5 @@
-import { type ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { type ReactNode } from 'react';
 
 type SectionHeadingProps = {
   eyebrow?: string;
@@ -17,35 +17,36 @@ export function SectionHeading({
   align = 'center',
 }: SectionHeadingProps) {
   return (
-    <div className={`${align === 'center' ? 'mx-auto text-center' : 'text-left'} max-w-3xl ${className}`}>
+    <div
+      className={`${align === 'center' ? 'text-center mx-auto' : 'text-left'} max-w-3xl ${className}`}
+    >
       {eyebrow && (
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-2xs font-semibold uppercase tracking-ultrawide text-secondary-300 mb-5"
+          className="inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-xs font-medium text-secondary-300 mb-4"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-secondary-400 animate-pulse-glow" />
           {eyebrow}
         </motion.div>
       )}
       <motion.h2
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-[1.1] text-balance"
+        transition={{ duration: 0.5 }}
+        className="font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white"
       >
         {title}
       </motion.h2>
       {subtitle && (
         <motion.p
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
-          className="mt-5 text-base md:text-lg text-ink-400 leading-relaxed text-pretty"
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mt-4 text-base md:text-lg text-ink-400 leading-relaxed"
         >
           {subtitle}
         </motion.p>

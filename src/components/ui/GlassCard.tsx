@@ -1,5 +1,5 @@
-import { motion, useMotionValue, useSpring, useTransform, type MotionProps } from 'framer-motion';
-import { useRef, type ReactNode, type PointerEvent } from 'react';
+import { motion, type MotionProps } from 'framer-motion';
+import { type ReactNode, type HTMLAttributes } from 'react';
 
 type GlassCardProps = {
   children: ReactNode;
@@ -7,9 +7,7 @@ type GlassCardProps = {
   hover?: boolean;
   float?: boolean;
   glow?: boolean;
-  tilt?: boolean;
-  delay?: number;
-} & Omit<MotionProps, 'children'>;
+} & HTMLAttributes<HTMLDivElement> & MotionProps;
 
 export function GlassCard({
   children,
@@ -17,60 +15,24 @@ export function GlassCard({
   hover = true,
   float = false,
   glow = false,
-  tilt = false,
-  delay = 0,
   ...rest
 }: GlassCardProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [6, -6]), { stiffness: 300, damping: 30 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), { stiffness: 300, damping: 30 });
-
-  const handleMouseMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (!tilt || !ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
-    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       whileHover={
         hover
-          ? { y: -4, transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] } }
+          ? { y: -6, transition: { duration: 0.2, ease: 'easeOut' } }
           : undefined
       }
-      onPointerMove={handleMouseMove}
-      onPointerLeave={handleMouseLeave}
-      style={tilt ? { rotateX, rotateY, transformPerspective: 1000 } : undefined}
       className={`relative rounded-3xl glass ${float ? 'animate-float-slow' : ''} ${
         glow ? 'glow-ring' : ''
       } ${className}`}
       {...rest}
     >
-      {/* Specular highlight */}
-      {tilt && (
-        <motion.div
-          className="pointer-events-none absolute inset-0 rounded-3xl opacity-0"
-          style={{
-            background: 'radial-gradient(circle at 50% 0%, rgba(255,255,255,0.10), transparent 60%)',
-          }}
-          whileHover={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        />
-      )}
       {children}
     </motion.div>
   );
